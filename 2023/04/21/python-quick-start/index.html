@@ -1,0 +1,333 @@
+<!DOCTYPE html><html lang="en-US"><head><meta charset="UTF-8"><title>Python开发快速上手 | 有涯</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Python虽然有很多可以吐槽的地方，但是它的流行度及开发速度还是非常友好的，之后有机会或许能用得上。"><link rel="canonical" href="https://blog.youya.org/2023/04/21/python-quick-start/"><link rel="alternate" href="/atom.xml" title="有涯" type="application/atom+xml"><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 7.3.0"></head><body class="body"><div class="container container--outer"><header class="header"><div class="container"><div class="logo"><a class="logo__link" href="/" title="有涯" rel="home"><div class="logo__title">有涯</div><div class="logo__tagline">行到水穷处，坐看云起时</div></a></div><nav class="menu"><button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0"><span class="menu__btn-title" tabindex="-1">Menu</span></button><ul class="menu__list"><li class="menu__item"><a class="menu__link" href="/"><span class="menu__text">Home</span></a></li><li class="menu__item"><a class="menu__link" href="/about/"><span class="menu__text">About</span></a></li><li class="menu__item"><a class="menu__link" href="/archives/"><span class="menu__text">Archives</span></a></li><li class="menu__item"><a class="menu__link" href="/brokers/"><span class="menu__text">Brokers</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class="primary"><main class="main" role="main"><article class="post"><header class="post__header"><h1 class="post__title">Python开发快速上手</h1><div class="post__meta meta"><div class="meta__item-datetime meta__item"><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg> <time class="meta__text" datetime="2023-04-21">2023-04-21</time></div></div></header><div class="content post__content clearfix"><p>Python虽然有很多可以吐槽的地方，但是它的流行度及开发速度还是非常友好的，之后有机会或许能用得上。</p><span id="more"></span><h2 id="f-string格式化字符串"><a href="#f-string格式化字符串" class="headerlink" title="f-string格式化字符串"></a>f-string格式化字符串</h2><p>简单的说，<code>f-string</code>可展示变量、计算表达式和调用函数，即：</p><pre><code class="hljs plaintext">f&quot;display &#123;variable&#125;&quot;
+f&quot;evaluate &#123;expression&#125;&quot;
+f&quot;call &#123;function&#125;&quot;</code></pre><pre><code class="hljs plaintext">name = &quot;Alice&quot;
+grade = 6
+
+f&quot;&#123;name&#125; is in grade &#123;grade&#125;&quot;</code></pre><p>自定义格式：<code>&#123;content:format&#125;</code></p><h3 id="千位分隔符"><a href="#千位分隔符" class="headerlink" title="千位分隔符"></a>千位分隔符</h3><pre><code class="hljs plaintext">n = 10000000
+
+f&quot;&#123;n:,&#125;&quot;    # 10,000,000
+f&quot;&#123;n:_&#125;&quot;    # 10_000_000</code></pre><h3 id="格式化日期时间"><a href="#格式化日期时间" class="headerlink" title="格式化日期时间"></a>格式化日期时间</h3><pre><code class="hljs plaintext">import datetime
+
+now = datetime.datetime.now()
+
+f&quot;&#123;now:%Y-%m-%d %H:%M:%S&#125;&quot;</code></pre><h3 id="整数进制转换"><a href="#整数进制转换" class="headerlink" title="整数进制转换"></a>整数进制转换</h3><pre><code class="hljs plaintext">n = 222
+
+f&quot;&#123;n:d&#125;&quot;    # 222
+f&quot;&#123;n:b&#125;&quot;    # 11011110
+f&quot;&#123;n:#b&#125;&quot;   # 0b11011110
+f&quot;&#123;n:o&#125;&quot;    # 336
+f&quot;&#123;n:#o&#125;&quot;   # 0o336
+f&quot;&#123;n:x&#125;&quot;    # de
+f&quot;&#123;n:#x&#125;&quot;   # 0xde
+f&quot;&#123;n:X&#125;&quot;    # DE
+f&quot;&#123;n:#X&#125;&quot;   # 0XDE</code></pre><h3 id="格式化浮点数"><a href="#格式化浮点数" class="headerlink" title="格式化浮点数"></a>格式化浮点数</h3><pre><code class="hljs plaintext">value = 12.345
+
+f&quot;&#123;value:.2f&#125;&quot;      # 12.34，注意5没有进位
+f&quot;&#123;value:.5f&#125;&quot;      # 12.34500
+
+value = 12.3451
+
+f&quot;&#123;value:.2f&#125;&quot;      # 12.35，注意5进位了，因为后面还有数字</code></pre><p>使用Decimal做到数学上的四舍五入：</p><pre><code class="hljs plaintext">import decimal
+
+decimal.getcontext().rounding = &quot;ROUND_HALF_UP&quot;
+
+value = 12.345
+
+result = decimal.Decimal(value).quantize(decimal.Decimal(&quot;0.00&quot;))
+
+f&quot;&#123;result&#125;&quot;</code></pre><h3 id="格式化宽度"><a href="#格式化宽度" class="headerlink" title="格式化宽度"></a>格式化宽度</h3><pre><code class="hljs plaintext">for i in range(1, 11):
+    print(f&#x27;&#123;i:02&#125; &#123;i*i:3&#125; &#123;i*i*i:4&#125;&#x27;)
+
+01   1    1
+02   4    8
+03   9   27
+04  16   64
+05  25  125
+06  36  216
+07  49  343
+08  64  512
+09  81  729
+10 100 1000</code></pre><h3 id="字符串对齐"><a href="#字符串对齐" class="headerlink" title="字符串对齐"></a>字符串对齐</h3><pre><code class="hljs plaintext">&#123;s:[=][&lt;^&gt;][N]&#125;
+
+= 表示对齐填充符
+&lt; 表示左对齐，默认行为
+^ 表示居中对齐
+&gt; 表示右对齐
+N 表示长度，当字符串长度超过N时，原样显示字符串
+
+s1 = &quot;1&quot;
+s2 = &quot;12345&quot;
+s3 = &quot;123456789&quot;
+
+f&quot;&#123;s1:=&lt;5&#125;&quot;     # 1====
+f&quot;&#123;s2:=&lt;5&#125;&quot;     # 12345
+f&quot;&#123;s3:=&lt;5&#125;&quot;     # 123456789
+
+f&quot;&#123;s1:=&gt;5&#125;&quot;       # ====1
+f&quot;&#123;s1:=^5&#125;&quot;       # ==1==</code></pre><h2 id="Python内置函数"><a href="#Python内置函数" class="headerlink" title="Python内置函数"></a>Python内置函数</h2><ul><li>abs(x) 返回绝对值</li><li>bin(x) 返回整数的二进制</li><li>bool(x) 返回对或错</li><li>chr(i) 返回整数的字符形式<code>chr(97) is &#39;a&#39;</code></li><li>divmod(a, b) 返回整除和余数<code>divmod(5, 2) is (2, 1)</code></li><li>hex(x) 返回整数的十六进制</li><li>input() 输入</li><li>int(x, base&#x3D;10) 转换成整数，或将非十进制转换成十进制<code>int(&quot;123&quot;) is 123; int(&quot;110&quot;, 2) is 6</code></li><li>isinstance(object, classinfo) 返回True如果object是classinfo的直接、间接、虚拟实例</li><li>issubclass(class, classinfo)</li><li>len(s) 返回<code>s</code>的长度，包括字符串、字节、元组、列表、字典、集合、range</li><li>max(a, b, c) 求最大值，也可以求数组元素最大值</li><li>min(a, b, c) 求最小值，也可以求数组元素最小值</li><li>oct(x) 求十进制和八进制形式</li><li>ord(c) 返回字符的ASCII码<code>ord(&#39;a&#39;) is 97</code></li><li>pow(base, exp) 求base的exp次方</li><li>reversed(s) 反转s</li><li>sorted(s) 排序</li><li>str(x) 将x转成string</li></ul><h2 id="Python字符串操作"><a href="#Python字符串操作" class="headerlink" title="Python字符串操作"></a>Python字符串操作</h2><h3 id="string模块"><a href="#string模块" class="headerlink" title="string模块"></a>string模块</h3><pre><code class="hljs plaintext">import string
+
+# abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ
+string.ascii_letters
+
+# abcdefghijklmnopqrstuvwxyz
+string.ascii_lowercase
+
+# ABCDEFGHIJKLMNOPQRSTUVWXYZ
+string.ascii_uppercase
+
+# 0123456789
+string.digits
+
+# 0123456789abcdefABCDEF
+string.hexdigits
+
+# 01234567
+string.octdigits
+
+# !&quot;#$%&amp;&#x27;()*+,-./:;&lt;=&gt;?@[\]^_`&#123;|&#125;~
+string.punctuation
+
+# characters space, tab, linefeed, return, formfeed, and vertical tab
+string.whitespace
+
+# all of above
+string.printable</code></pre><h3 id="Python字符串函数"><a href="#Python字符串函数" class="headerlink" title="Python字符串函数"></a>Python字符串函数</h3><pre><code class="hljs plaintext">help(str)
+
+# 首字母大写，其他部分小写
+str.capitalize()
+
+# 大写变小写，小写变大写
+str.swapcase()
+
+# 是否prefix开头
+str.startswith(prefix)
+
+# 子串出现的次数
+str.count(substr)
+
+# 是否suffix结尾
+str.endswith(suffix)
+
+# 是否包含sub
+str.find(sub)
+
+# 是否只包含字母数字
+str.isalnum()
+
+# 是否只包含数字
+str.isdecimal()     # &#x27;0123&#x27;
+str.isdigit()       # &#x27;0123&#x27; &#x27;⅔&#x27; &#x27;2²&#x27;
+str.isnumeric()     # &#x27;0123&#x27; &#x27;⅔&#x27; &#x27;2²&#x27; &#x27;ↁ&#x27;, the last is Roman numerials
+
+# 是否只包含字母
+str.isalpha()
+
+# 是否是小写字母，如果没有小写字母就是False
+str.islower()
+
+# 是否是大写字母，如果没有大写字母就是False
+str.isupper()
+
+# 转小写
+str.lower()
+
+# 转大写
+str.upper()
+
+# 去掉空格
+str.strip()
+str.lstrip()
+str.rstrip()
+
+# 移除前后相关的字符 abc: all chars a, b or c
+str.lstrip(chars)
+str.rstrip(chars)
+
+# 移除前后子串 abc: only the &#x27;abc&#x27; substr
+str.removeprefix(substr)
+str.removesuffix(substr)
+
+# 将字符串用spe分割成3部分
+str.partition(sep)  # &quot;abcdefg&quot;.partition(&quot;d&quot;) = (&quot;abc&quot;, &quot;d&quot;, &quot;efg&quot;)
+str.rpartition(sep)
+
+# 替换子串
+str.replace(old, new, count=-1)
+
+# 查找子串
+str.find(substr)    # 查不到返回-1
+str.rfind(substr)
+str.index(substr)   # 查不到抛出 ValueError
+str.rindex(substr)
+
+# 分割字符串
+str.split(sep)
+str.rsplit(sep, maxsplit=-1)</code></pre><h2 id="Python列表函数"><a href="#Python列表函数" class="headerlink" title="Python列表函数"></a>Python列表函数</h2><p>Python list 函数都是原地更新的，即<code>list.reverse()</code>没返回值，而是更新<code>list</code>本身。</p><pre><code class="hljs plaintext">help(list)
+
+# 添加元素到列表最后
+list.append(object)
+
+# 返回浅拷贝
+list.copy()
+
+# 返回元素出现的次数
+list.count(value)
+
+# 扩展列表
+list.extend(iterable)
+
+# 返回元素第一次出现的位置
+list.index(value, start=0, stop=9223372036854775807)
+
+# 在某位置前插入元素
+list.insert(index, object)
+
+# 删除某位置的元素，空列表或超出列表长度时返回ValueError
+list.pop(index)
+
+# 删除第一次出现的value
+list.remove(value)
+
+# 反转列表
+list.reverse()
+
+# 列表排序
+list.sort(reverse=False)</code></pre><h2 id="Python字典"><a href="#Python字典" class="headerlink" title="Python字典"></a>Python字典</h2><pre><code class="hljs plaintext">help(dict)
+
+# 浅拷贝
+dict.copy()
+
+# 返回key的值
+dict.get(key, default=None)
+
+# 返回字典键值列表
+dict.items() # &#123;1: 2, 3: 4&#125; =&gt; dict_items([(1, 2), (3, 4)])
+
+# 返回键列表
+dict.keys() # &#123;1: 2, 3: 4&#125; =&gt; dict_keys([1, 3])
+
+# 返回键列表
+dict.values() # &#123;1: 2, 3: 4&#125; =&gt; dict_values([2, 4])
+
+# 删除key并返回value，若key不存在则返回default，否则KeyError
+dict.pop(key[,default])
+
+# 删除键值并返回
+dict.popitems() # 返回 (key, value)</code></pre><h2 id="Python-控制语句"><a href="#Python-控制语句" class="headerlink" title="Python 控制语句"></a>Python 控制语句</h2><h2 id="If-条件语句"><a href="#If-条件语句" class="headerlink" title="If 条件语句"></a>If 条件语句</h2><pre><code class="hljs plaintext">if x &lt; 0:
+    print(&quot;small&quot;)
+elif x == 0:
+    print(&quot;big&quot;)
+else:
+    print(&quot;medium&quot;)</code></pre><h3 id="For-循环"><a href="#For-循环" class="headerlink" title="For 循环"></a>For 循环</h3><pre><code class="hljs plaintext">words = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
+for word in words:
+    print(word)
+...
+one
+two
+three
+
+=================================
+
+words = [&quot;one&quot;, &quot;two&quot;, &quot;three&quot;]
+for i in range(len(words)):
+    print(i, word[i])
+...
+0 one
+1 two
+2 three</code></pre><pre><code class="hljs plaintext">for i in range(5):
+    print(i)
+...
+0
+1
+2
+3
+4
+
+=================================
+
+for i in range(2, 5):
+    print(i)
+...
+2
+3
+4
+
+=================================
+
+for i in range(0, 10, 3):
+    print(i)
+...
+0
+3
+6
+9</code></pre><h3 id="While-循环"><a href="#While-循环" class="headerlink" title="While 循环"></a>While 循环</h3><pre><code class="hljs plaintext">a, b = 0, 1
+while a &lt; 10:
+    a, b = b, a+b
+    print(b)</code></pre><h3 id="Match语句"><a href="#Match语句" class="headerlink" title="Match语句"></a>Match语句</h3><pre><code class="hljs plaintext">status = http_status
+
+match status:
+    case 200:
+        return &quot;OK&quot;
+    case 400:
+        return &quot;Bad Request&quot;
+    case 500:
+        return &quot;Internal Error&quot;</code></pre><h2 id="Python项目初始配置"><a href="#Python项目初始配置" class="headerlink" title="Python项目初始配置"></a>Python项目初始配置</h2><p>推荐使用<code>pyproject.toml</code>来管理项目，<code>uv</code>管理依赖，<code>ruff</code>格式化代码。</p><ul><li><p>pyproject.toml文件内容</p><pre><code class="hljs plaintext">[project]
+name = &quot;taishan&quot;
+version = &quot;0.1.0&quot;
+requires-python = &quot;&gt;3.10&quot;
+license = &#123;file = &quot;LICENSE&quot;&#125;
+description = &quot;Taishan to proxy APIs of Taishan service&quot;
+
+authors = [
+  &#123;name = &quot;Some Name&quot;, email = &quot;name@example.com&quot;&#125;,
+]
+
+dependencies = [
+  &quot;fastapi&gt;=0.115.6&quot;,
+  &quot;requests&gt;=2.32.3&quot;,
+  &quot;uvicorn&gt;=0.34.0&quot;,
+]
+
+[project.urls]
+Repository = &quot;https://github.com/chenzhiwei/python-quick-start&quot;
+
+[project.optional-dependencies]
+dev = [
+]
+
+[project.scripts]
+taishan-cli = &quot;taishan.cli:run&quot;
+taishan-server = &quot;taishan.server:run&quot;
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.format]
+quote-style = &quot;double&quot;
+docstring-code-format = true
+
+[tool.ruff.lint.isort]
+case-sensitive = false
+force-sort-within-sections = false
+
+[tool.distutils.egg_info]
+egg_base = &quot;build&quot;
+
+[[tool.uv.index]]
+url = &quot;https://mirrors.huaweicloud.com/repository/pypi/simple&quot;
+default = true
+
+[build-system]
+requires = [&quot;pdm-backend&quot;]
+build-backend = &quot;pdm.backend&quot;</code></pre></li><li><p>uv命令</p><pre><code class="hljs plaintext">uv sync # 创建venv并安装依赖
+source .venv/bin/activate
+
+uv add some-deps # 添加并安装依赖
+
+taishan-cli # 运行项目命令
+
+taishan-server # 运行项目服务
+
+deactivate</code></pre></li><li><p>ruff命令</p><pre><code class="hljs plaintext">ruff check src # 检查src目录中文件的格式及语法
+
+ruff format src # 格式化src目录中的文件</code></pre></li></ul><h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul><li><a href="https://github.com/chenzhiwei/python-quick-start" target="_blank" rel="noopener external nofollow noreferrer">https://github.com/chenzhiwei/python-quick-start</a></li><li><a href="https://docs.python.org/3/library/stdtypes.html" target="_blank" rel="noopener external nofollow noreferrer">https://docs.python.org/3/library/stdtypes.html</a></li><li><a href="https://docs.python.org/3/library/functions.html" target="_blank" rel="noopener external nofollow noreferrer">https://docs.python.org/3/library/functions.html</a></li><li><a href="https://docs.python.org/3/tutorial/controlflow.html" target="_blank" rel="noopener external nofollow noreferrer">https://docs.python.org/3/tutorial/controlflow.html</a></li></ul></div><footer class="post__footer"><div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg><ul class="tags__list"><li class="tags__item"><a class="tags__link btn" href="/tags/tech/" rel="tag">Tech</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/python/" rel="tag">Python</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/dev/" rel="tag">dev</a></li></ul></div></footer></article></main><nav class="pager flex"><div class="pager__item pager__item--prev"><a class="pager__link" href="/2023/11/29/garbage-time-of-history/" rel="prev"><span class="pager__subtitle">«&thinsp;Previous</span><p class="pager__title">如何渡过历史的垃圾时间</p></a></div><div class="pager__item pager__item--next"><a class="pager__link" href="/2022/10/23/kubernetes-csi-storage-e2e-multi-tenant/" rel="next"><span class="pager__subtitle">Next&thinsp;»</span><p class="pager__title">Kubernetes CSI 存储端到端多租户隔离</p></a></div></nav><section class="comments"><div id="tcomment"></div><script src="https://registry.npmmirror.com/twikoo/1.6.39/files/dist/twikoo.min.js"></script><script>twikoo.init({envId:"https://blog-comments.youya.org",el:"#tcomment",path:"/2023/04/21/python-quick-start/",lang:"zh-CN"})</script></section></div><aside class="sidebar"><div class="widget-search widget"><form class="widget-search__form" role="search" method="get" action="https://google.com/search" target="_blank"><input class="widget-search__field" type="search" placeholder="Search..." name="q" aria-label="Search..."> <input class="widget-search__submit" type="submit" value="Search"> <input type="hidden" name="sitesearch" value="https://blog.youya.org"></form></div><div class="widget-ads widget"><h4 class="widget__title">Google Ads</h4><div class="widget__content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5700774973519770" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5700774973519770" data-ad-slot="1935557915" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><div class="widget-related widget"><h4 class="widget__title">Related Posts</h4><div class="widget__content"><ul class="widget__list"><li class="widget__item"><a class="widget__link" href="/2024/07/06/layer-2-network/">闲话大二层网络</a></li><li class="widget__item"><a class="widget__link" href="/2024/06/09/linux-routing-and-routing-policy/">Linux中的路由表与路由策略管理</a></li><li class="widget__item"><a class="widget__link" href="/2024/04/27/podman-manages-vms/">Podman管理虚拟机</a></li><li class="widget__item"><a class="widget__link" href="/2022/10/23/kubernetes-csi-storage-e2e-multi-tenant/">Kubernetes CSI 存储端到端多租户隔离</a></li><li class="widget__item"><a class="widget__link" href="/2022/10/22/kubernetes-access-control/">Kubernetes 权限控制</a></li></ul></div></div><div class="widget-recent widget"><h4 class="widget__title">Recent Posts</h4><div class="widget__content"><ul class="widget__list"><li class="widget__item"><a class="widget__link" href="/2024/07/14/poor-china-economy/">繁华渐逝：腹背受敌的中国经济</a></li><li class="widget__item"><a class="widget__link" href="/2024/07/06/layer-2-network/">闲话大二层网络</a></li><li class="widget__item"><a class="widget__link" href="/2024/06/09/linux-routing-and-routing-policy/">Linux中的路由表与路由策略管理</a></li><li class="widget__item"><a class="widget__link" href="/2024/05/18/year-end-bonus-tax/">奇葩的年终奖税收政策导致年终奖黑洞</a></li><li class="widget__item"><a class="widget__link" href="/2024/04/27/podman-manages-vms/">Podman管理虚拟机</a></li></ul></div></div><div class="widget-taglist widget"><h4 class="widget__title">Tag Cloud</h4><div class="widget__content"><a href="/tags/android/" style="font-size:26px">Android</a> <a href="/tags/apps/" style="font-size:18px">Apps</a> <a href="/tags/archlinux/" style="font-size:14px">Archlinux</a> <a href="/tags/bank/" style="font-size:14px">Bank</a> <a href="/tags/bash/" style="font-size:14px">Bash</a> <a href="/tags/blog/" style="font-size:26px">Blog</a> <a href="/tags/bond/" style="font-size:14px">Bond</a> <a href="/tags/cloudflare/" style="font-size:14px">CloudFlare</a> <a href="/tags/comics/" style="font-size:14px">Comics</a> <a href="/tags/commissions/" style="font-size:14px">Commissions</a> <a href="/tags/container/" style="font-size:22px">Container</a> <a href="/tags/cube/" style="font-size:22px">Cube</a> <a href="/tags/deepin/" style="font-size:14px">Deepin</a> <a href="/tags/docker/" style="font-size:22px">Docker</a> <a href="/tags/etf/" style="font-size:14px">ETF</a> <a href="/tags/economy/" style="font-size:14px">Economy</a> <a href="/tags/email/" style="font-size:14px">Email</a> <a href="/tags/fx/" style="font-size:14px">FX</a> <a href="/tags/firstrade/" style="font-size:14px">Firstrade</a> <a href="/tags/fund/" style="font-size:18px">Fund</a> <a href="/tags/futu/" style="font-size:18px">Futu</a> <a href="/tags/futures/" style="font-size:14px">Futures</a> <a href="/tags/google/" style="font-size:14px">Google</a> <a href="/tags/greenify/" style="font-size:14px">Greenify</a> <a href="/tags/hexo/" style="font-size:14px">Hexo</a> <a href="/tags/ibkr/" style="font-size:18px">IBKR</a> <a href="/tags/icbc/" style="font-size:14px">ICBC</a> <a href="/tags/iaas/" style="font-size:14px">IaaS</a> <a href="/tags/kubernetes/" style="font-size:26px">Kubernetes</a> <a href="/tags/life/" style="font-size:14px">Life</a> <a href="/tags/linux/" style="font-size:26px">Linux</a> <a href="/tags/longbridge/" style="font-size:14px">Longbridge</a> <a href="/tags/magisk/" style="font-size:14px">Magisk</a> <a href="/tags/mariadb/" style="font-size:14px">MariaDB</a> <a href="/tags/mysql/" style="font-size:14px">MySQL</a> <a href="/tags/network/" style="font-size:14px">Network</a> <a href="/tags/nginx/" style="font-size:14px">Nginx</a> <a href="/tags/oneplus/" style="font-size:14px">OnePlus</a> <a href="/tags/openssl/" style="font-size:14px">OpenSSL</a> <a href="/tags/option/" style="font-size:18px">Option</a> <a href="/tags/php/" style="font-size:14px">PHP</a> <a href="/tags/podman/" style="font-size:18px">Podman</a> <a href="/tags/postfix/" style="font-size:14px">Postfix</a> <a href="/tags/proxy/" style="font-size:14px">Proxy</a> <a href="/tags/python/" style="font-size:14px">Python</a> <a href="/tags/repost/" style="font-size:30px">Repost</a> <a href="/tags/rubik/" style="font-size:14px">Rubik</a> <a href="/tags/shell/" style="font-size:18px">Shell</a> <a href="/tags/stock/" style="font-size:30px">Stock</a> <a href="/tags/systemd/" style="font-size:14px">Systemd</a></div></div></aside></div><footer class="footer"><div class="container footer__container flex"><div class="footer__copyright">&copy; 2025 YOUYA.ORG. <span class="footer__copyright-credits">Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.</span></div></div></footer></div><script src="/js/menu.js"></script></body></html>

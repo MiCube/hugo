@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en-US"><head><meta charset="UTF-8"><title>Podman - 一个 Docker 的替代软件 | 有涯</title><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="description" content="Docker 将容器真正的带入大众视野，引领了容器化风潮，但是 Docker 本身作为一个容器引擎并没有太大的想像空间，毕竟单纯一个容器引擎对用户来说基本没什么用，毕竟用户把应用容器化之后还有很多事情要做，比如编排、扩缩容、访问控制、高可用等等。"><link rel="canonical" href="https://blog.youya.org/2019/08/31/podman-is-a-good-docker-alternative/"><link rel="alternate" href="/atom.xml" title="有涯" type="application/atom+xml"><link rel="shortcut icon" href="/favicon.ico"><link rel="stylesheet" href="/css/style.css"><meta name="generator" content="Hexo 7.3.0"></head><body class="body"><div class="container container--outer"><header class="header"><div class="container"><div class="logo"><a class="logo__link" href="/" title="有涯" rel="home"><div class="logo__title">有涯</div><div class="logo__tagline">行到水穷处，坐看云起时</div></a></div><nav class="menu"><button class="menu__btn" aria-haspopup="true" aria-expanded="false" tabindex="0"><span class="menu__btn-title" tabindex="-1">Menu</span></button><ul class="menu__list"><li class="menu__item"><a class="menu__link" href="/"><span class="menu__text">Home</span></a></li><li class="menu__item"><a class="menu__link" href="/about/"><span class="menu__text">About</span></a></li><li class="menu__item"><a class="menu__link" href="/archives/"><span class="menu__text">Archives</span></a></li><li class="menu__item"><a class="menu__link" href="/brokers/"><span class="menu__text">Brokers</span></a></li></ul></nav></div></header><div class="wrapper flex"><div class="primary"><main class="main" role="main"><article class="post"><header class="post__header"><h1 class="post__title">Podman - 一个 Docker 的替代软件</h1><div class="post__meta meta"><div class="meta__item-datetime meta__item"><svg class="meta__icon icon icon-time" width="16" height="14" viewBox="0 0 30 28"><path d="M15 0C7 0 1 6 1 14s6 14 14 14 14-6 14-14S23 0 15 0zm0 25C9 25 4 20 4 14S9 3 15 3s11 5 11 11-5 11-11 11zm1-18h-2v8.4l6.8 4.4L22 18l-6-3.8V7z"/></svg> <time class="meta__text" datetime="2019-08-31">2019-08-31</time></div></div></header><div class="content post__content clearfix"><p>Docker 将容器真正的带入大众视野，引领了容器化风潮，但是 Docker 本身作为一个容器引擎并没有太大的想像空间，毕竟单纯一个容器引擎对用户来说基本没什么用，毕竟用户把应用容器化之后还有很多事情要做，比如编排、扩缩容、访问控制、高可用等等。</p><span id="more"></span><p>Docker 其实也意识到这个问题了，所以一次公布了三个组件：Swarm, Machine 和 Compose ，但是很多公司对此并不太感冒，现在的赢家是 Kubernetes。究其原因我觉得是 Docker 虽然是开源的，但其实并不开放，用户害怕绑定到一家公司上面。Mesosphere 也是同样的情况。</p><p>以上是背景，最终也导致了 Docker 里加入的内容越来越多：将其作为一个容器编排工具（Kubernetes）的容器引擎吧，有太多没用的东西，像 Docker network, volume 等等东西容器编排工具其实并不用，因为编排工具有自己的网络和存储。将其作为一个人个开发工具吧，里面的一些像 Docker service 这种东西也基本没什么用。总的来说就是 Docker 在两边都不讨好，更别说很多让人摸不着头脑的 Bug 了，使用的越多会遇到越多的奇怪的 Bug。</p><p>Docker 最让我无语的设计就是所有操作都是 守护进程来做的，这个确实有一定的好处，但是也带来了很多不便，比如从私有仓库拉取镜像，要信任这个私有仓库的话需要修改守护进程的配置文件、重启守护进程之后才可以，比如要加个代理也需要重启守护进程，这个操作非常麻烦。</p><p>我从 2014 年开始使用 Docker，对其真是又爱又恨，但是随着越来越多的容器引擎出现，Docker 慢慢的也就变成了一个备胎。作为 Kubernetes 最成功的发行版，OpenShift 从 4.1 开始已经默认使用 CRI-O 作为其容器引擎了，而 RedHat 在 2018 年也发布了 Podman(Pod Manager) 套件，兼容 Docker 的大部分命令。</p><p>Podman 和 Docker 最主要的区别是 Podman 没有笨重的服务端，并且使用 Kubernetes 的 Pod 作为其单机编排标准，光这两项就已经甩开 Docker 两条大街了。当然 Podman 也有个小小的缺点就是需要借助于 Systemd 才能让容器在机器重启时跟随系统启动，没有 Docker 方便，但是有些人喜欢这种方式有些人不喜欢，作为用户我是不关心怎样跟随系统启动，只要方便就行，显然 Podman 并没有 Docker 方便。</p><p>Docker 使用的是其开发的 Compose 来编排多个容器，我对 Compose 不了解，所以就不说它与 Kubernetes Pod 格式的优缺点了，但是我要说的是 Kubernetes 已经是事实上的容器编排标准了，Kubernetes Pod 也被越来越多的人所接受，从这一点上来说 Kubernetes Pod 才是未来。</p><p>说说上手使用，我之前写过一篇文章说怎样<a href="https://youya.org/2017/12/03/docker-nginx-mysql-php/" target="_blank" rel="noopener external nofollow noreferrer">用 Docker 来部署 PHP + MySQL 的站点</a>，这种方式虽然比传统部署方式简单但是也有非常明显的缺点：当主容器重启后，其他容器就与主容器「失联」了，要挨个重启一下其他容器才行。</p><p>Podman 的 Pod 编排方式提供了一个更简单、更理想的部署方式，一个 YAML 文件搞定，能避免 Docker 中的问题，还是同样的例子：部署一个 Nginx + PHP + MySQL&#x2F;MariaDB 的站点，WordPress 就是这样的站点。假设下面就是你的站点目录结构：</p><pre><code class="hljs plaintext">/var/www/html/wordpress
+|-- nginx
+    |-- mysite.conf
+`-- source-dir</code></pre><p>其中 mysite.conf 内容大致如下：</p><pre><code class="hljs plaintext">server &#123;
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    server_name mysite.com www.mysite.com;
+
+    proxy_connect_timeout 4;
+    proxy_read_timeout 300;
+    proxy_send_timeout 300;
+
+    index  index.php index.html index.htm;
+
+    location / &#123;
+        root /var/www/html/wordpress/source-dir;
+        try_files $uri $uri/ /index.php?$query_string;
+    &#125;
+
+    location ~ \.php$ &#123;
+        root           /var/www/html/wordpress/source-dir;
+        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  /var/www/html/wordpress/source-dir$fastcgi_script_name;
+        include        fastcgi_params;
+    &#125;
+&#125;</code></pre><p>其中 nginx 目录存放的是 Nginx 配置文件，source-dir 目录是你站点的源码目录，下面就是一个标准的 Kubernetes Pod YAML 文件，大致意思是将本机的<code>/var/lib/mysql</code>与容器里的<code>/var/lib/mysql</code>，本机的<code>/var/www/html/wordpress/nginx</code>与容器里的<code>/etc/nginx/conf.d</code>，本机的<code>/var/www/html/wordpress/source-dir</code>与容器里的<code>/var/www/html/wordpress/source-dir</code>做映射。</p><pre><code class="hljs plaintext">---
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: wordpress
+  name: wordpress
+spec:
+  hostname: wordpress
+  containers:
+  - name: nginx
+    image: docker.io/siji/nginx:latest
+    ports:
+    - containerPort: 80
+      hostPort: 80
+      protocol: TCP
+    - containerPort: 443
+      hostPort: 443
+      protocol: TCP
+    resources: &#123;&#125;
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: &#123;&#125;
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - name: nginx-conf
+      mountPath: /etc/nginx/conf.d
+    - name: nginx-data
+      mountPath: /var/www/html/wordpress/source-dir
+  - name: mariadb
+    image: docker.io/siji/mariadb:10.3
+    env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: 123456
+    resources: &#123;&#125;
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: &#123;&#125;
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - name: mariadb-data
+      mountPath: /var/lib/mysql
+  - name: php-fpm
+    image: docker.io/siji/php:7-fpm
+    resources: &#123;&#125;
+    securityContext:
+      allowPrivilegeEscalation: true
+      capabilities: &#123;&#125;
+      privileged: false
+      readOnlyRootFilesystem: false
+    volumeMounts:
+    - name: nginx-data
+      mountPath: /var/www/html/wordpress/source-dir
+  volumes:
+  - name: nginx-conf
+    hostPath:
+      path: /var/www/html/wordpress/nginx
+      type: DirectoryOrCreate
+  - name: nginx-data
+    hostPath:
+      path: /var/www/html/wordpress/source-dir
+      type: DirectoryOrCreate
+  - name: mariadb-data
+    hostPath:
+      path: /var/lib/mysql
+      type: DirectoryOrCreate
+status: &#123;&#125;</code></pre><p>保存这个文件为<code>mysite.yaml</code>之后运行如下命令<code>podman play kube mysite.yaml</code>，然后你的 WordPress 博客就起动好了。</p><p>用 Podman 这种方式备份与恢复站点非常容易方便，日常使用也可以，我使用 Podman 有两个多月了，没遇到性能问题及 Bug ，倒是遇到了一些缺少的功能，毕竟 Podman 还太年轻，功能也在不断的完善。</p><p>作为 Docker 的替代方案，我觉得 Podman 完全可以。</p></div><footer class="post__footer"><div class="post__tags tags clearfix"><svg class="tags__badge icon icon-tag" width="16" height="16" viewBox="0 0 32 32"><path d="M32 19c0 1-1 2-1 2L21 31s-1 1-2 1-2-1-2-1L2 16c-1-1-1.4-2-1.4-2S0 12.5 0 11V3C0 1.5.8.8.8.8S1.5 0 3 0h8c1.5 0 3 .6 3 .6S15 1 16 2l15 15s1 1 1 2zM7 10a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/></svg><ul class="tags__list"><li class="tags__item"><a class="tags__link btn" href="/tags/docker/" rel="tag">Docker</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/tech/" rel="tag">Tech</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/podman/" rel="tag">Podman</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/kubernetes/" rel="tag">Kubernetes</a></li><li class="tags__item"><a class="tags__link btn" href="/tags/%E5%AE%B9%E5%99%A8/" rel="tag">容器</a></li></ul></div></footer></article></main><nav class="pager flex"><div class="pager__item pager__item--prev"><a class="pager__link" href="/2019/12/08/recent-things/" rel="prev"><span class="pager__subtitle">«&thinsp;Previous</span><p class="pager__title">近期的一些事情</p></a></div><div class="pager__item pager__item--next"><a class="pager__link" href="/2019/08/25/blog/" rel="next"><span class="pager__subtitle">Next&thinsp;»</span><p class="pager__title">博客</p></a></div></nav><section class="comments"><div id="tcomment"></div><script src="https://registry.npmmirror.com/twikoo/1.6.39/files/dist/twikoo.min.js"></script><script>twikoo.init({envId:"https://blog-comments.youya.org",el:"#tcomment",path:"/2019/08/31/podman-is-a-good-docker-alternative/",lang:"zh-CN"})</script></section></div><aside class="sidebar"><div class="widget-search widget"><form class="widget-search__form" role="search" method="get" action="https://google.com/search" target="_blank"><input class="widget-search__field" type="search" placeholder="Search..." name="q" aria-label="Search..."> <input class="widget-search__submit" type="submit" value="Search"> <input type="hidden" name="sitesearch" value="https://blog.youya.org"></form></div><div class="widget-ads widget"><h4 class="widget__title">Google Ads</h4><div class="widget__content"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5700774973519770" crossorigin="anonymous"></script><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-5700774973519770" data-ad-slot="1935557915" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle=window.adsbygoogle||[]).push({})</script></div></div><div class="widget-related widget"><h4 class="widget__title">Related Posts</h4><div class="widget__content"><ul class="widget__list"><li class="widget__item"><a class="widget__link" href="/2024/04/27/podman-manages-vms/">Podman管理虚拟机</a></li><li class="widget__item"><a class="widget__link" href="/2022/10/23/kubernetes-csi-storage-e2e-multi-tenant/">Kubernetes CSI 存储端到端多租户隔离</a></li><li class="widget__item"><a class="widget__link" href="/2022/10/22/kubernetes-access-control/">Kubernetes 权限控制</a></li><li class="widget__item"><a class="widget__link" href="/2022/10/16/kubernetes-authn/">Kubernetes 认证系统</a></li><li class="widget__item"><a class="widget__link" href="/2017/12/03/docker-nginx-mysql-php/">用 Docker 来部署 PHP + MySQL 的站点</a></li></ul></div></div><div class="widget-recent widget"><h4 class="widget__title">Recent Posts</h4><div class="widget__content"><ul class="widget__list"><li class="widget__item"><a class="widget__link" href="/2024/07/14/poor-china-economy/">繁华渐逝：腹背受敌的中国经济</a></li><li class="widget__item"><a class="widget__link" href="/2024/07/06/layer-2-network/">闲话大二层网络</a></li><li class="widget__item"><a class="widget__link" href="/2024/06/09/linux-routing-and-routing-policy/">Linux中的路由表与路由策略管理</a></li><li class="widget__item"><a class="widget__link" href="/2024/05/18/year-end-bonus-tax/">奇葩的年终奖税收政策导致年终奖黑洞</a></li><li class="widget__item"><a class="widget__link" href="/2024/04/27/podman-manages-vms/">Podman管理虚拟机</a></li></ul></div></div><div class="widget-taglist widget"><h4 class="widget__title">Tag Cloud</h4><div class="widget__content"><a href="/tags/android/" style="font-size:26px">Android</a> <a href="/tags/apps/" style="font-size:18px">Apps</a> <a href="/tags/archlinux/" style="font-size:14px">Archlinux</a> <a href="/tags/bank/" style="font-size:14px">Bank</a> <a href="/tags/bash/" style="font-size:14px">Bash</a> <a href="/tags/blog/" style="font-size:26px">Blog</a> <a href="/tags/bond/" style="font-size:14px">Bond</a> <a href="/tags/cloudflare/" style="font-size:14px">CloudFlare</a> <a href="/tags/comics/" style="font-size:14px">Comics</a> <a href="/tags/commissions/" style="font-size:14px">Commissions</a> <a href="/tags/container/" style="font-size:22px">Container</a> <a href="/tags/cube/" style="font-size:22px">Cube</a> <a href="/tags/deepin/" style="font-size:14px">Deepin</a> <a href="/tags/docker/" style="font-size:22px">Docker</a> <a href="/tags/etf/" style="font-size:14px">ETF</a> <a href="/tags/economy/" style="font-size:14px">Economy</a> <a href="/tags/email/" style="font-size:14px">Email</a> <a href="/tags/fx/" style="font-size:14px">FX</a> <a href="/tags/firstrade/" style="font-size:14px">Firstrade</a> <a href="/tags/fund/" style="font-size:18px">Fund</a> <a href="/tags/futu/" style="font-size:18px">Futu</a> <a href="/tags/futures/" style="font-size:14px">Futures</a> <a href="/tags/google/" style="font-size:14px">Google</a> <a href="/tags/greenify/" style="font-size:14px">Greenify</a> <a href="/tags/hexo/" style="font-size:14px">Hexo</a> <a href="/tags/ibkr/" style="font-size:18px">IBKR</a> <a href="/tags/icbc/" style="font-size:14px">ICBC</a> <a href="/tags/iaas/" style="font-size:14px">IaaS</a> <a href="/tags/kubernetes/" style="font-size:26px">Kubernetes</a> <a href="/tags/life/" style="font-size:14px">Life</a> <a href="/tags/linux/" style="font-size:26px">Linux</a> <a href="/tags/longbridge/" style="font-size:14px">Longbridge</a> <a href="/tags/magisk/" style="font-size:14px">Magisk</a> <a href="/tags/mariadb/" style="font-size:14px">MariaDB</a> <a href="/tags/mysql/" style="font-size:14px">MySQL</a> <a href="/tags/network/" style="font-size:14px">Network</a> <a href="/tags/nginx/" style="font-size:14px">Nginx</a> <a href="/tags/oneplus/" style="font-size:14px">OnePlus</a> <a href="/tags/openssl/" style="font-size:14px">OpenSSL</a> <a href="/tags/option/" style="font-size:18px">Option</a> <a href="/tags/php/" style="font-size:14px">PHP</a> <a href="/tags/podman/" style="font-size:18px">Podman</a> <a href="/tags/postfix/" style="font-size:14px">Postfix</a> <a href="/tags/proxy/" style="font-size:14px">Proxy</a> <a href="/tags/python/" style="font-size:14px">Python</a> <a href="/tags/repost/" style="font-size:30px">Repost</a> <a href="/tags/rubik/" style="font-size:14px">Rubik</a> <a href="/tags/shell/" style="font-size:18px">Shell</a> <a href="/tags/stock/" style="font-size:30px">Stock</a> <a href="/tags/systemd/" style="font-size:14px">Systemd</a></div></div></aside></div><footer class="footer"><div class="container footer__container flex"><div class="footer__copyright">&copy; 2025 YOUYA.ORG. <span class="footer__copyright-credits">Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>.</span></div></div></footer></div><script src="/js/menu.js"></script></body></html>
